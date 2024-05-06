@@ -2,7 +2,7 @@
 
 
 #include "Frustum.h"
-
+#include "Components/DrawFrustumComponent.h"
 #include "Camera/CameraComponent.h"
 
 
@@ -30,6 +30,16 @@ AFrustum::AFrustum(const FObjectInitializer& ObjectInitializer)
 
 	CameraComponent->SetCameraMesh(nullptr);
 	CameraComponent->SetupAttachment(SceneComponent);
+
+	// Setup DrawFrustumComp
+	DrawFrustum = CreateDefaultSubobject<UDrawFrustumComponent>(TEXT("DrawFrustumComponent"));
+	DrawFrustum->SetupAttachment(this->CameraComponent);
+	DrawFrustum->SetIsVisualizationComponent(true);
+	DrawFrustum->CreationMethod = this->CameraComponent->CreationMethod;
+	DrawFrustum->SetVisibility(false);
+	DrawFrustum->RegisterComponentWithWorld(GetWorld());
+
+	EndDistance = 1000.0f;
 }
 
 // Called when the game starts or when spawned
@@ -49,7 +59,26 @@ void AFrustum::OverrideFrustumColor(FColor NewColor)
 	if(CameraComponent)
 	{
 		CameraComponent->OverrideFrustumColor(NewColor);
+		DrawFrustum->FrustumColor = NewColor;
 		CameraComponent->RefreshVisualRepresentation();
+		DrawFrustum->MarkRenderStateDirty();
 	}
 }
 
+void AFrustum::DrawThisFrustum() {
+	DrawFrustum->FrustumAngle = this->CameraComponent->FieldOfView;
+	DrawFrustum->FrustumStartDist = 10.f;
+	DrawFrustum->FrustumEndDist = DrawFrustum->FrustumStartDist + EndDistance;
+	DrawFrustum->FrustumAspectRatio = this->CameraComponent->AspectRatio;
+	DrawFrustum->MarkRenderStateDirty();
+}
+
+void AFrustum::ChangeFrustumVisibility() {
+	if (DrawFrustum->GetVisibleFlag()) {
+		DrawFrustum->SetVisibility(false);
+	}
+	else {
+		DrawFrustum->SetVisibility(true);
+	}
+	this->DrawThisFrustum();
+}

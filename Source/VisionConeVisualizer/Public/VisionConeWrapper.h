@@ -30,6 +30,15 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	AFrustum* FrustumWrap;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		FString Frustum1Path;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		FString Frustum2Path;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		FString FrustumWrapPath;
 	
 public:
 	// Called every frame
@@ -42,5 +51,5 @@ public:
 	// Function to find a wrap cone which is the smallest cover for Cone A and B.
 	// IMPLEMENT THIS FUNCTION.
 	UFUNCTION(CallInEditor, BlueprintCallable)
-	void WarpCone();
+	void ReadAndSetFrustums();
 };
