@@ -395,12 +395,19 @@ void SetFrustum(AFrustum* frustum, FString Path) {
 	float aspect, fov;
 	CalcFovAndAspect(FrustumPara.vFov, aspect, fov);
 
-	frustum->CameraComponent->SetAspectRatio(aspect);
-	frustum->CameraComponent->SetFieldOfView(fov);
-	FRotator ZeroRot(0,0,0);
-	frustum->CameraComponent->SetRelativeRotation(ZeroRot);
-	frustum->CameraComponent->AddRelativeRotation(FrustumRot);
+	//frustum->CameraComponent->SetAspectRatio(aspect);
+	//frustum->CameraComponent->SetFieldOfView(fov);
+	//FRotator ZeroRot(0,0,0);
+	//frustum->CameraComponent->SetRelativeRotation(ZeroRot);
+	//frustum->CameraComponent->AddRelativeRotation(FrustumRot);
 
+	frustum->AspectRatio = aspect;
+	frustum->FOV = fov;
+	FRotator ZeroRot(0, 0, 0);
+	frustum->SceneComponent->SetRelativeRotation(ZeroRot);
+	frustum->SceneComponent->AddRelativeRotation(FrustumRot);
+
+	frustum->DrawThisFrustum();
 	return;
 }
 

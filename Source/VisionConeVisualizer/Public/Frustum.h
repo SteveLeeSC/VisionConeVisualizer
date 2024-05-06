@@ -15,11 +15,16 @@ class VISIONCONEVISUALIZER_API AFrustum : public AActor
 public:
 
 	/** The camera component for this camera */
-	UPROPERTY(Category = CameraActor, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* CameraComponent;
+	//UPROPERTY(Category = CameraActor, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	//UCameraComponent* CameraComponent;
 
 	UPROPERTY(Category = CameraActor, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* SceneComponent;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AAA")
+	float AspectRatio;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AAA")
+	float FOV;
 public:
 	// Sets default values for this actor's properties
 	AFrustum();

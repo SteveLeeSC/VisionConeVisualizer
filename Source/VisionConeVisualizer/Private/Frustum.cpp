@@ -21,22 +21,22 @@ AFrustum::AFrustum(const FObjectInitializer& ObjectInitializer)
 	// Make the scene component the root component
 	RootComponent = SceneComponent;
 	
-	// Setup camera defaults
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
-	CameraComponent->FieldOfView = 90.0f;
-	CameraComponent->bConstrainAspectRatio = true;
-	CameraComponent->AspectRatio = 1.777778f;
-	CameraComponent->PostProcessBlendWeight = 1.0f;
+	//// Setup camera defaults
+	//CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
+	//CameraComponent->FieldOfView = 90.0f;
+	//CameraComponent->bConstrainAspectRatio = true;
+	//CameraComponent->AspectRatio = 1.777778f;
+	//CameraComponent->PostProcessBlendWeight = 1.0f;
 
-	CameraComponent->SetCameraMesh(nullptr);
-	CameraComponent->SetupAttachment(SceneComponent);
+	//CameraComponent->SetCameraMesh(nullptr);
+	//CameraComponent->SetupAttachment(SceneComponent);
 
 	// Setup DrawFrustumComp
 	DrawFrustum = CreateDefaultSubobject<UDrawFrustumComponent>(TEXT("DrawFrustumComponent"));
-	DrawFrustum->SetupAttachment(this->CameraComponent);
+	DrawFrustum->SetupAttachment(this->SceneComponent);
 	DrawFrustum->SetIsVisualizationComponent(true);
-	DrawFrustum->CreationMethod = this->CameraComponent->CreationMethod;
-	DrawFrustum->SetVisibility(false);
+	DrawFrustum->CreationMethod = this->SceneComponent->CreationMethod;
+	DrawFrustum->SetVisibility(true);
 	DrawFrustum->RegisterComponentWithWorld(GetWorld());
 
 	EndDistance = 1000.0f;
@@ -56,20 +56,20 @@ void AFrustum::Tick(float DeltaTime)
 
 void AFrustum::OverrideFrustumColor(FColor NewColor)
 {
-	if(CameraComponent)
+	if(DrawFrustum)
 	{
-		CameraComponent->OverrideFrustumColor(NewColor);
+		//CameraComponent->OverrideFrustumColor(NewColor);
 		DrawFrustum->FrustumColor = NewColor;
-		CameraComponent->RefreshVisualRepresentation();
+		//CameraComponent->RefreshVisualRepresentation();
 		DrawFrustum->MarkRenderStateDirty();
 	}
 }
 
 void AFrustum::DrawThisFrustum() {
-	DrawFrustum->FrustumAngle = this->CameraComponent->FieldOfView;
+	DrawFrustum->FrustumAngle = this->FOV;
 	DrawFrustum->FrustumStartDist = 10.f;
 	DrawFrustum->FrustumEndDist = DrawFrustum->FrustumStartDist + EndDistance;
-	DrawFrustum->FrustumAspectRatio = this->CameraComponent->AspectRatio;
+	DrawFrustum->FrustumAspectRatio = this->AspectRatio;
 	DrawFrustum->MarkRenderStateDirty();
 }
 
