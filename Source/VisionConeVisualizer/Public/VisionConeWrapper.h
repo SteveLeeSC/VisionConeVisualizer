@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Frustum.h"
+#include "ViewFrustumCover.h"
 #include "Camera/CameraComponent.h"
 #include "VisionConeWrapper.generated.h"
 
@@ -20,6 +21,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, Category = Tick)
+		bool bEnableEditorTick = false;
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -44,12 +48,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual bool ShouldTickIfViewportsOnly() const override;
+
 	// Function to recolor frustums
 	UFUNCTION(CallInEditor, BlueprintCallable)
-	void RecolorFrustums();
+		void RecolorFrustums();
 
 	// Function to find a wrap cone which is the smallest cover for Cone A and B.
-	// IMPLEMENT THIS FUNCTION.
 	UFUNCTION(CallInEditor, BlueprintCallable)
-	void ReadAndSetFrustums();
+		void ReadAndSetFrustums();
+
+	UFUNCTION(CallInEditor, BlueprintCallable)
+		void WarpFrustums();
 };

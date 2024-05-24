@@ -3,7 +3,7 @@
 
 #include "VisionConeWrapper.h"
 #include<string>
-
+using namespace FrustumCover;
 // Sets default values
 AVisionConeWrapper::AVisionConeWrapper()
 {
@@ -21,7 +21,11 @@ void AVisionConeWrapper::BeginPlay()
 void AVisionConeWrapper::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	UE_LOG(LogTemp, Warning, TEXT("Hello"));
+}
 
+bool AVisionConeWrapper::ShouldTickIfViewportsOnly()const{
+	return bEnableEditorTick;
 }
 
 void AVisionConeWrapper::RecolorFrustums()
@@ -418,4 +422,10 @@ void AVisionConeWrapper::ReadAndSetFrustums()
 	SetFrustum(this->FrustumWrap, this->FrustumWrapPath);
 }
 
+
+void AVisionConeWrapper::WarpFrustums() {
+	FCoordinateSys2D CoordSys;
+	FMPlane Plane;
+	CoordSys.BuildSysOnPlane(Plane);
+}
 
