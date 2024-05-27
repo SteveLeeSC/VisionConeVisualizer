@@ -5,43 +5,40 @@
 #include "ProceduralMeshComponent.h"
 
 // Sets default values
-AQuadrilateralDrawer::AQuadrilateralDrawer()
+UQuadrilateralDrawer::UQuadrilateralDrawer(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	MeshComponent = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("QuadrilateralDrawerMesh"), false);
-//	RootComponent = MeshComponent;
-	SetRootComponent(MeshComponent);
-	
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 // Called when the game starts or when spawned
-void AQuadrilateralDrawer::BeginPlay()
+void UQuadrilateralDrawer::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AQuadrilateralDrawer::Tick(float DeltaTime)
+void UQuadrilateralDrawer::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::Tick(DeltaTime);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 }
 
-void AQuadrilateralDrawer::AddQuadrilateralInEditor()
+void UQuadrilateralDrawer::AddQuadrilateralInEditor()
 {
 	QuadrilateralToAdd.CalcNormal();
 	Quadrilaterals.Push(QuadrilateralToAdd);
 }
 
-void AQuadrilateralDrawer::AddQuadrilateral(const FVector& A, const FVector& B, const FVector& C, const FVector& D,
+void UQuadrilateralDrawer::AddQuadrilateral(const FVector& A, const FVector& B, const FVector& C, const FVector& D,
                                             const FLinearColor& Color)
 {
 	Quadrilaterals.Emplace(A, B, C, D, Color);
 }
 
-void AQuadrilateralDrawer::DrawQuadrilaterals()
+void UQuadrilateralDrawer::DrawQuadrilaterals()
 {
 	TArray<FVector> Vertices;
 	TArray<int32> Triangles;
@@ -66,14 +63,14 @@ void AQuadrilateralDrawer::DrawQuadrilaterals()
 		UVs.Append(UVs_);
 	}
 
-	MeshComponent->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, TArray<FProcMeshTangent>(), false);
+	this->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, TArray<FProcMeshTangent>(), false);
 
 	// Create a unlit material
 	UMaterialInstanceDynamic* Material = UMaterialInstanceDynamic::Create(
 					LoadObject<UMaterial>(nullptr, TEXT("Material'/Game/Materials/ColorMaterial.ColorMaterial'")),
 					this);
 	Material->SetVectorParameterValue("Emissive Color", FLinearColor(1.0, 1.0, 0.0, 1.0));
-	MeshComponent->SetMaterial(0, Material);
-	//MeshComponent->OverrideMaterials.Add();
+	this->SetMaterial(0, Material);
+	//this->OverrideMaterials.Add();
 }
 

@@ -83,17 +83,17 @@ struct FQuadrilateral
 };
 // TODO: make this a component to be used in FViewFrustum
 UCLASS()
-class VISIONCONEVISUALIZER_API AQuadrilateralDrawer : public AActor
+class VISIONCONEVISUALIZER_API UQuadrilateralDrawer : public UProceduralMeshComponent
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AQuadrilateralDrawer();
+	UQuadrilateralDrawer(const FObjectInitializer& ObjectInitializer);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Quadrilateral")
-	UProceduralMeshComponent* MeshComponent;
+	//UProceduralMeshComponent* MeshComponent;
 	
 	TArray<FQuadrilateral> Quadrilaterals;
 	
@@ -106,7 +106,7 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Quadrilateral")
 	void AddQuadrilateralInEditor();
