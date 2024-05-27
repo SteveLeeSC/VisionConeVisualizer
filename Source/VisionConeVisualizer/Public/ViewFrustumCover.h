@@ -7,7 +7,37 @@
 #include "ViewFrustumCover.generated.h"
 
 namespace FrustumCover {
+	// Declare all structs and class here.
+	struct IterRecorder;
 	struct FMRay;
+	struct FMPlane;
+	struct FCoordinateSys2D;
+	struct FViewFrustum;
+	struct FScreenInfo;
+	
+	/*
+	 *	Record the iteration of the frustum cover algorithm.
+	 *  TODO: Implement the function to record the iteration of the frustum cover algorithm.
+	 */
+	struct IterRecorder
+	{
+		/*
+		 * Key: Iteration number
+		 * Value: The data of screen info of the frustum cover at this iteration.
+		 */
+		TMap<int, TArray<FScreenInfo>> Iterations;
+		void Record(int IterNum, const TArray<FScreenInfo>& ScreenInfos)
+		{
+			Iterations.Add(IterNum, ScreenInfos);
+		}
+
+		TArray<FScreenInfo>& Query(int IterNum)
+		{
+			return Iterations[IterNum];
+		}
+	};
+	
+	
 
 	USTRUCT()
 	struct FMPlane {

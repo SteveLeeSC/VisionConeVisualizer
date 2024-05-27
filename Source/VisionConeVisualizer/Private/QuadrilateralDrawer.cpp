@@ -32,9 +32,21 @@ void UQuadrilateralDrawer::AddQuadrilateralInEditor()
 	Quadrilaterals.Push(QuadrilateralToAdd);
 }
 
+void UQuadrilateralDrawer::ClearOldQuadrilaterals()
+{
+	Quadrilaterals.Empty();
+}
+
 void UQuadrilateralDrawer::AddQuadrilateral(const FVector& A, const FVector& B, const FVector& C, const FVector& D,
                                             const FLinearColor& Color)
 {
+	// Debug: log four points of the quadrilateral
+	// First log the component name
+	UE_LOG(LogTemp, Warning, TEXT("Component Name: %s"), *this->GetName());
+	UE_LOG(LogTemp, Warning, TEXT("A: %f %f %f"), A.X, A.Y, A.Z);
+	UE_LOG(LogTemp, Warning, TEXT("B: %f %f %f"), B.X, B.Y, B.Z);
+	UE_LOG(LogTemp, Warning, TEXT("C: %f %f %f"), C.X, C.Y, C.Z);
+	UE_LOG(LogTemp, Warning, TEXT("D: %f %f %f"), D.X, D.Y, D.Z);
 	Quadrilaterals.Emplace(A, B, C, D, Color);
 }
 
@@ -62,14 +74,17 @@ void UQuadrilateralDrawer::DrawQuadrilaterals()
 		Colors.Append(Colors_);
 		UVs.Append(UVs_);
 	}
-
-	this->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, TArray<FProcMeshTangent>(), false);
+	
+ 	this->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, TArray<FProcMeshTangent>(), false);
 
 	// Create a unlit material
 	UMaterialInstanceDynamic* Material = UMaterialInstanceDynamic::Create(
 					LoadObject<UMaterial>(nullptr, TEXT("Material'/Game/Materials/ColorMaterial.ColorMaterial'")),
 					this);
-	Material->SetVectorParameterValue("Emissive Color", FLinearColor(1.0, 1.0, 0.0, 1.0));
+	// Use the color of the first quadrilateral as the emissive color
+	auto QuadColor = Quadrilaterals[0].GetColor()[0];
+	UE_LOG(LogTemp, Warning, TEXT("QuadColor: %f %f %f %f"), QuadColor.R, QuadColor.G, QuadColor.B, QuadColor.A);
+	Material->SetVectorParameterValue("Emissive Color", FLinearColor(QuadColor.R, QuadColor.G, QuadColor.B, QuadColor.A));
 	this->SetMaterial(0, Material);
 	//this->OverrideMaterials.Add();
 }

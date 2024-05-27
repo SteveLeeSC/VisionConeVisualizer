@@ -429,3 +429,10 @@ void AVisionConeWrapper::WarpFrustums() {
 	CoordSys.BuildSysOnPlane(Plane);
 }
 
+void AVisionConeWrapper::DrawPlanes()
+{
+	this->FrustumWrap->DrawFarPlane();
+	this->Frustum1->DrawIntersectionQuadWithFrustumFarPlane(this->FrustumWrap);
+	this->Frustum2->DrawIntersectionQuadWithFrustumFarPlane(this->FrustumWrap);
+}
+

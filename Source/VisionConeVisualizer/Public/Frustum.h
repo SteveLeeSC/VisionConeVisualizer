@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraActor.h"
+#include "QuadrilateralDrawer.h"
 #include "GameFramework/Actor.h"
 #include "Camera/CameraComponent.h"
 #include "Frustum.generated.h"
@@ -21,6 +22,9 @@ public:
 	UPROPERTY(Category = CameraActor, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* SceneComponent;
 
+	UPROPERTY(Category = "Quadrilateral", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UQuadrilateralDrawer* QuadrilateralDrawer;
+		
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AAA")
 	float AspectRatio;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "AAA")
@@ -49,6 +53,15 @@ public:
 
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "AAA")
 		void ChangeFrustumVisibility();
+
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "AAA")
+		void DrawFarPlane();
+
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "AAA")
+		void DrawIntersectionQuadWithFrustumFarPlane(AFrustum *OtherFrustum);
+
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "AAA")
+		void ChangeQuadrilateralDrawerVisibility();
 
 #if WITH_EDITORONLY_DATA
 	// The frustum component used to show visually where the camera field of view is

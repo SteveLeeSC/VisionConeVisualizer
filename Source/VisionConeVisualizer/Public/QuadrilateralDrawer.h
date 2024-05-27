@@ -81,7 +81,7 @@ struct FQuadrilateral
 		return UVs;
 	}
 };
-// TODO: make this a component to be used in FViewFrustum
+
 UCLASS()
 class VISIONCONEVISUALIZER_API UQuadrilateralDrawer : public UProceduralMeshComponent
 {
@@ -110,6 +110,9 @@ public:
 
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Quadrilateral")
 	void AddQuadrilateralInEditor();
+
+	UFUNCTION(CallInEditor, BlueprintCallable, Category = "Quadrilateral")
+	void ClearOldQuadrilaterals();
 	
 	UFUNCTION(BlueprintCallable, Category = "Quadrilateral")
 	void AddQuadrilateral(const FVector& A, const FVector& B, const FVector& C, const FVector& D, const FLinearColor& Color);

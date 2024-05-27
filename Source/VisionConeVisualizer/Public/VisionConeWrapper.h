@@ -51,13 +51,16 @@ public:
 	virtual bool ShouldTickIfViewportsOnly() const override;
 
 	// Function to recolor frustums
-	UFUNCTION(CallInEditor, BlueprintCallable)
+	UFUNCTION(CallInEditor, BlueprintCallable, Category="AAA")
 		void RecolorFrustums();
 
 	// Function to find a wrap cone which is the smallest cover for Cone A and B.
-	UFUNCTION(CallInEditor, BlueprintCallable)
+	UFUNCTION(CallInEditor, BlueprintCallable, Category="AAA")
 		void ReadAndSetFrustums();
 
-	UFUNCTION(CallInEditor, BlueprintCallable)
+	UFUNCTION(CallInEditor, BlueprintCallable, Category="AAA")
 		void WarpFrustums();
+
+	UFUNCTION(CallInEditor, BlueprintCallable, Category="AAA")
+		void DrawPlanes();
 };
