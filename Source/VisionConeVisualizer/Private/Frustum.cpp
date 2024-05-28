@@ -72,7 +72,7 @@ void AFrustum::OverrideFrustumColor(FColor NewColor)
 
 void AFrustum::DrawThisFrustum() {
 	DrawFrustum->FrustumAngle = this->FOV;
-	DrawFrustum->FrustumStartDist = 10.f;
+	DrawFrustum->FrustumStartDist = 0.0f;
 	DrawFrustum->FrustumEndDist = DrawFrustum->FrustumStartDist + EndDistance;
 	DrawFrustum->FrustumAspectRatio = this->AspectRatio;
 	DrawFrustum->MarkRenderStateDirty();

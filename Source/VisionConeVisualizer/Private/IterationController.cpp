@@ -16,8 +16,9 @@ bool FIterationController::Init()
 	return FRunnable::Init();
 }
 
-void FIterationController::Run()
+uint32 FIterationController::Run()
 {
+	return 0;
 }
 
 void FIterationController::Exit()
