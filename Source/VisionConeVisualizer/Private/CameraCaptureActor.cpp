@@ -16,6 +16,7 @@ ACameraCaptureActor::ACameraCaptureActor(const FObjectInitializer& ObjectInitial
 	// Initialize the Scene Capture Component and set it as the root component
 	SceneCaptureComponent = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("SceneCaptureComponent"));
 	RootComponent = SceneCaptureComponent;
+	SceneCaptureComponent->bCaptureEveryFrame = true;
 	
 	// Initialize the Render Target and set it as the render target for the Scene Capture Component
 	CapturedScene = NewObject<UTextureRenderTarget2D>(SceneCaptureComponent, TEXT("CapturedScene"));
@@ -62,7 +63,7 @@ void ACameraCaptureActor::BeginPlay()
 		.HasCloseButton(true)
 		;
 	Viewport1 = SNew(SViewport)
-		.RenderDirectlyToWindow(true)
+		// .RenderDirectlyToWindow(true)
 		.EnableGammaCorrection(false)
 		.IgnoreTextureAlpha(true)
 		.ViewportSize(FVector2D(800, 600))
@@ -72,12 +73,10 @@ void ACameraCaptureActor::BeginPlay()
 			SNew(SImage).Image(CapturedScene)
 		];
 	Window1->SetContent(Viewport1.ToSharedRef());
-	FSlateApplication::Get().AddWindow(Window1.ToSharedRef());
-	
-	
-	// Attach viewport to window to fill the window up
-	Window1->SetContent(Viewport1.ToSharedRef());
+	Window1->SetViewportSizeDrivenByWindow(false);
 	Window1->FlashWindow();
+	FSlateApplication::Get().AddWindow(Window1.ToSharedRef());
+	CapturedScene->UpdateResourceImmediate();
 	
 	
 	Window2 = SNew(SWindow)
