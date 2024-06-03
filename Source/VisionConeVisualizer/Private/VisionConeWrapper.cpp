@@ -21,7 +21,7 @@ void AVisionConeWrapper::BeginPlay()
 void AVisionConeWrapper::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp, Warning, TEXT("Hello"));
+	// UE_LOG(LogTemp, Warning, TEXT("Hello"));
 }
 
 bool AVisionConeWrapper::ShouldTickIfViewportsOnly()const{

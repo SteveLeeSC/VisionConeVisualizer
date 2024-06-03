@@ -24,6 +24,9 @@ public:
 	// Sets default values for this actor's properties
 	ACameraCaptureActor();
 
+	// Constructor with object initializer
+	ACameraCaptureActor(const FObjectInitializer& ObjectInitializer);
+
 	// Scene Capture Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AAA", meta = (AllowPrivateAccess = "true"))
 	USceneCaptureComponent2D* SceneCaptureComponent;
@@ -39,12 +42,20 @@ public:
 	UTextureRenderTarget2D* RenderTarget2;
 
 	// Create two viewports
-	TSharedPtr<FViewport> Viewport1;
-	TSharedPtr<FViewport> Viewport2;
+	TSharedPtr<SViewport> Viewport1;
+	TSharedPtr<SViewport> Viewport2;
 	
 	// Create two windows
 	TSharedPtr<SWindow> Window1;
 	TSharedPtr<SWindow> Window2;
+
+#if WITH_EDITOR
+	/*// Called when the actor is being removed from a level
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	// Called when editor shuts down
+	virtual void Shutdown() override;*/
+#endif	// WITH_EDITOR
 	
 protected:
 	// Called when the game starts or when spawned

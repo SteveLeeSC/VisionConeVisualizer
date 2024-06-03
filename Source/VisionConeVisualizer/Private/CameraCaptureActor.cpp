@@ -8,33 +8,47 @@ ACameraCaptureActor::ACameraCaptureActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+}
+
+ACameraCaptureActor::ACameraCaptureActor(const FObjectInitializer& ObjectInitializer):
+	Super(ObjectInitializer)
+{
 	// Initialize the Scene Capture Component and set it as the root component
 	SceneCaptureComponent = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("SceneCaptureComponent"));
 	RootComponent = SceneCaptureComponent;
 	
 	// Initialize the Render Target and set it as the render target for the Scene Capture Component
-	CapturedScene = CreateDefaultSubobject<UTextureRenderTarget2D>(TEXT("RenderTarget"));
-	SceneCaptureComponent->TextureTarget = CapturedScene;
+	CapturedScene = NewObject<UTextureRenderTarget2D>(SceneCaptureComponent, TEXT("CapturedScene"));
+	CapturedScene->InitAutoFormat(800, 600);
+	
+	if(CapturedScene != nullptr)
+	{
+		SceneCaptureComponent->TextureTarget = CapturedScene;
+	}
+	CapturedScene->UpdateResourceImmediate();
+}
 
-	/*// Set render target resolution to 3960x2160
-	CapturedScene->SizeX = 3960;
-	CapturedScene->SizeY = 2160;
-	CapturedScene->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA8;*/
-
+// Called when the game starts or when spawned
+void ACameraCaptureActor::BeginPlay()
+{
+	Super::BeginPlay();
 	// Initialize the two render targets to be displayed in two viewports
-	RenderTarget1 = CreateDefaultSubobject<UTextureRenderTarget2D>(TEXT("RenderTarget1"));
-	RenderTarget2 = CreateDefaultSubobject<UTextureRenderTarget2D>(TEXT("RenderTarget2"));
-
-	// Set render target resolution to 1920x1080
-	RenderTarget1->SizeX = 1920, RenderTarget1->SizeY = 1080;
-	RenderTarget1->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA8;
-	RenderTarget2->SizeX = 1920, RenderTarget2->SizeY = 1080;
-	RenderTarget2->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA8;
+	// RenderTarget1 = CreateDefaultSubobject<UTextureRenderTarget2D>(TEXT("RenderTarget1"));
+	// RenderTarget2 = CreateDefaultSubobject<UTextureRenderTarget2D>(TEXT("RenderTarget2"));
+	//
+	// // Set render target resolution to 1920x1080
+	// RenderTarget1->SizeX = 1920, RenderTarget1->SizeY = 1080;
+	// RenderTarget1->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA8;
+	// RenderTarget2->SizeX = 1920, RenderTarget2->SizeY = 1080;
+	// RenderTarget2->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA8;
 	
 	// Initialize the two windows and all other objects: viewports, slate renderers, etc
 	// Set up window 1 and its viewport and slate renderer
 	// then display render target 1 in the viewport
-	// First, create the window
+	// Create the sviewport which will be used to display the render target
+	
+	
+	// Create the window
 	Window1 = SNew(SWindow)
 		.AutoCenter(EAutoCenter::None)
 		.Title(FText::FromString("Windows 1"))
@@ -45,14 +59,25 @@ ACameraCaptureActor::ACameraCaptureActor()
 		.SizingRule(ESizingRule::UserSized)
 		.SupportsMaximize(true)
 		.SupportsMinimize(true)
-		.HasCloseButton(true);
-	FSlateApplication::Get().AddWindow(Window1);
-	// Create the fviewport which will be used to display the render target
-	
-	
-	// Attach viewport to window
+		.HasCloseButton(true)
+		;
+	Viewport1 = SNew(SViewport)
+		.RenderDirectlyToWindow(true)
+		.EnableGammaCorrection(false)
+		.IgnoreTextureAlpha(true)
+		.ViewportSize(FVector2D(800, 600))
+		.EnableBlending(true)
+		.Visibility(EVisibility::Visible)
+		[
+			SNew(SImage).Image(CapturedScene)
+		];
 	Window1->SetContent(Viewport1.ToSharedRef());
-	// Display render target 1 in the viewport
+	FSlateApplication::Get().AddWindow(Window1.ToSharedRef());
+	
+	
+	// Attach viewport to window to fill the window up
+	Window1->SetContent(Viewport1.ToSharedRef());
+	Window1->FlashWindow();
 	
 	
 	Window2 = SNew(SWindow)
@@ -77,13 +102,6 @@ ACameraCaptureActor::ACameraCaptureActor()
 		.EnableBlending(true);
 
 	Window2->SetContent(Viewport2.ToSharedRef());
-}
-
-// Called when the game starts or when spawned
-void ACameraCaptureActor::BeginPlay()
-{
-	Super::BeginPlay();
-	
 }
 
 // Called every frame
