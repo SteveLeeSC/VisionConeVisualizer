@@ -3,6 +3,8 @@
 
 #include "CameraCaptureActor.h"
 
+
+
 // Sets default values
 ACameraCaptureActor::ACameraCaptureActor()
 {
@@ -48,7 +50,21 @@ void ACameraCaptureActor::BeginPlay()
 	// then display render target 1 in the viewport
 	// Create the sviewport which will be used to display the render target
 	
+	// Create a fsceneviewport and its client
+	ViewportClient1 = MakeShareable(new FRenderTargetDrawerViewportClient());
+	ViewportClient1->SetRenderTarget(CapturedScene);
 	
+	// Create the sviewport
+	Viewport1 = SNew(SViewport)
+		// .RenderDirectlyToWindow(true)
+		.EnableGammaCorrection(false)
+		.IgnoreTextureAlpha(true)
+		.ViewportSize(FVector2D(800, 600))
+		.EnableBlending(false)
+		.Visibility(EVisibility::Visible)
+		;
+	auto SceneViewport = MakeShared<FSceneViewport>(ViewportClient1.Get(), Viewport1);
+	Viewport1->SetViewportInterface(SceneViewport);
 	// Create the window
 	Window1 = SNew(SWindow)
 		.AutoCenter(EAutoCenter::None)
@@ -61,19 +77,11 @@ void ACameraCaptureActor::BeginPlay()
 		.SupportsMaximize(true)
 		.SupportsMinimize(true)
 		.HasCloseButton(true)
-		;
-	Viewport1 = SNew(SViewport)
-		// .RenderDirectlyToWindow(true)
-		.EnableGammaCorrection(false)
-		.IgnoreTextureAlpha(true)
-		.ViewportSize(FVector2D(800, 600))
-		.EnableBlending(true)
-		.Visibility(EVisibility::Visible)
 		[
-			SNew(SImage).Image(CapturedScene)
+			Viewport1.ToSharedRef()
 		];
-	Window1->SetContent(Viewport1.ToSharedRef());
-	Window1->SetViewportSizeDrivenByWindow(false);
+		
+	Window1->SetViewportSizeDrivenByWindow(true);
 	Window1->FlashWindow();
 	FSlateApplication::Get().AddWindow(Window1.ToSharedRef());
 	CapturedScene->UpdateResourceImmediate();

@@ -13,6 +13,8 @@
 #include "Framework/Application/SlateApplication.h"
 #include "Widgets/Images/SImage.h"
 #include "Widgets/SUserWidget.h"
+#include "Slate/SceneViewport.h"
+#include "RendertargetDrawerViewportClient.h"
 #include "CameraCaptureActor.generated.h"
 
 UCLASS()
@@ -48,6 +50,10 @@ public:
 	// Create two windows
 	TSharedPtr<SWindow> Window1;
 	TSharedPtr<SWindow> Window2;
+
+	// Create two viewport clients
+	TSharedPtr<FRenderTargetDrawerViewportClient> ViewportClient1;
+	TSharedPtr<FRenderTargetDrawerViewportClient> ViewportClient2;
 
 #if WITH_EDITOR
 	/*// Called when the actor is being removed from a level
