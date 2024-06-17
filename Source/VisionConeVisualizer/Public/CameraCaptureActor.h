@@ -55,6 +55,8 @@ public:
 	TSharedPtr<FRenderTargetDrawerViewportClient> ViewportClient1;
 	TSharedPtr<FRenderTargetDrawerViewportClient> ViewportClient2;
 
+	// SceneViewports
+	TSharedPtr<FSceneViewport> SceneViewport1;
 #if WITH_EDITOR
 	/*// Called when the actor is being removed from a level
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
